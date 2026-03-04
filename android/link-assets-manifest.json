@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/OpenSans-Bold.ttf",
+      "sha1": "953814da1b753763dfa5a7ecc18bdbb14890e16b"
+    },
+    {
+      "path": "assets/fonts/OpenSans-ExtraBold.ttf",
+      "sha1": "3a02724d19fdb3c67b174be7a789757a194ee2ff"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Medium.ttf",
+      "sha1": "a44dcac0388d78404b84578f3e593c740399ebb5"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Regular.ttf",
+      "sha1": "76ea5d4c70539ad9b0e7faf7e4fbe3bae8a961c7"
+    },
+    {
+      "path": "assets/fonts/OpenSans-SemiBold.ttf",
+      "sha1": "9b1adfbc773bb8bd1e6c4ca85c34441a43c2bc54"
+    },
+    {
+      "path": "assets/fonts/Pyidaungsu-Bold.ttf",
+      "sha1": "e97de7e1d666a668f60330e0ea65ca0e30734210"
+    },
+    {
+      "path": "assets/fonts/Pyidaungsu-Regular.ttf",
+      "sha1": "d21fd31fb6a032d6dda3fd929fc71787df0e0fc1"
+    }
+  ]
+}

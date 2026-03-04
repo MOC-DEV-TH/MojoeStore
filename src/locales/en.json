@@ -1,0 +1,18 @@
+{
+    "signin": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "sales_summary": "Sales Summary",
+    "invoices": "Invoices",
+    "cashier": "Cashier",
+    "report": "Report",
+    "profit": "Profit",
+    "filter_by": "Filter By",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "filter": "Filter",
+    "scanner": "Scanning Product",
+    "done": "Done",
+    "checkout": "Check Out"
+}

@@ -1,0 +1,3 @@
+const InventoryVM = () => {};
+
+export {InventoryVM};

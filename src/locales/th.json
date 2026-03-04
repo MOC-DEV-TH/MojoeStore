@@ -1,0 +1,18 @@
+{
+    "signin": "เข้าสู่ระบบ",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "sales_summary": "สรุปการขาย",
+    "invoices": "ใบแจ้งหนี้",
+    "cashier": "แคชเชียร์",
+    "report": "รายงาน",
+    "profit": "กำไร",
+    "filter_by": "กรองโดย",
+    "day": "วัน",
+    "month": "เดือน",
+    "year": "ปี",
+    "filter": "ตัวกรอง",
+    "scanner": "Scanning Product",
+    "done": "Done",
+    "checkout": "ชำระเงิน"
+}
