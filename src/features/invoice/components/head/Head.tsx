@@ -3,10 +3,13 @@ import {SPACING} from '@constants';
 import {useColors, useFonts} from '@hooks';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {FilterBar} from '../filterbar';
+import {useTranslation} from 'react-i18next';
+
 
 export const Head = ({onFilter, date}: any) => {
   const fonts = useFonts();
   const colors = useColors();
+  const {t} = useTranslation();
 
   return (
     <>
@@ -26,7 +29,7 @@ export const Head = ({onFilter, date}: any) => {
                 textAlign: 'center',
                 paddingHorizontal: '5%',
               }}>
-              Invoice No.
+              {t('invoice_no')}
             </Text>
           </View>
           <View style={{width: '33%'}}>
@@ -37,7 +40,7 @@ export const Head = ({onFilter, date}: any) => {
                 textAlign: 'center',
                 paddingHorizontal: '5%',
               }}>
-              Date
+              {t('date')}
             </Text>
           </View>
           <View style={{width: '33%'}}>
@@ -48,7 +51,7 @@ export const Head = ({onFilter, date}: any) => {
                 textAlign: 'center',
                 paddingHorizontal: '5%',
               }}>
-              Total (Ks)
+              {t('total_ks')}
             </Text>
           </View>
         </Stack>

@@ -4,8 +4,11 @@ import {Category, Product, SubCategory} from './form';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useEffect} from 'react';
 import {CommonVM} from '../common';
+import {useTranslation} from 'react-i18next';
+
 
 export const InventoryAddNewScreen = () => {
+  const {t} = useTranslation();
   const commonViewModel = CommonVM();
   const colors = useColors();
   const fonts = useFonts();
@@ -27,9 +30,9 @@ export const InventoryAddNewScreen = () => {
           tabBarLabelStyle: {...fonts.en.FW400_14, textTransform: 'none'},
           tabBarItemStyle: {width: 'auto'},
         }}>
-        <Tab.Screen name={'New Product'} component={Product} />
-        <Tab.Screen name={'New Category'} component={Category} />
-        <Tab.Screen name={'New Sub Category'} component={SubCategory} />
+        <Tab.Screen name={t('new_product')} component={Product} />
+        <Tab.Screen name={t('new_category')} component={Category} />
+        <Tab.Screen name={t('new_sub_category')} component={SubCategory} />
       </Tab.Navigator>
     </BaseView>
   );

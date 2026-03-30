@@ -23,6 +23,7 @@ import {useTranslation} from 'react-i18next';
 import {useForm} from 'react-hook-form';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
+
 export const FilterBar = ({onFilter}: any) => {
   const days =
     Array.from({length: 31}, (_, index) => ({
@@ -122,7 +123,7 @@ export const FilterBar = ({onFilter}: any) => {
             </View>
             <View style={{width: '48%'}}>
               <View style={{marginBottom: 10}}>
-                <Text>Start Date</Text>
+                <Text>{t('start_date')}</Text>
               </View>
               <View style={{position: 'relative'}}>
                 <Pressable
@@ -138,7 +139,7 @@ export const FilterBar = ({onFilter}: any) => {
             </View>
             <View style={{width: '48%'}}>
               <View style={{marginBottom: 10}}>
-                <Text>End Date</Text>
+                <Text>{t('end_date')}</Text>
               </View>
               <View style={{position: 'relative'}}>
                 <Pressable

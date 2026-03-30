@@ -1,3 +1,4 @@
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {BottomTabNavigator, SCREENS, navigationRef} from '@navigations';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,11 +15,14 @@ import {isUndefined, useAuthInfo} from '@utils';
 import {ROLES} from '@constants';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+
 
 export const RootNavigation = () => {
   const dispatch = useDispatch();
   const Stack = createNativeStackNavigator();
   const {token, role} = useAuthInfo();
+  const {t} = useTranslation();
   const [isChecking, setIsChecking] = useState(true);
   const isLoggedIn = useSelector((store: RootState) => store.auth.isLoggedIn);
   const isLoading = useSelector((store: RootState) => store.loading.isLoading);
@@ -87,39 +91,45 @@ export const RootNavigation = () => {
               <Stack.Screen
                 name={SCREENS.SCAN_BARCODE.name}
                 component={SCREENS.SCAN_BARCODE.component}
+                options={{
+                      title: t('scan_barcode'),
+                             }}
               />
               <Stack.Screen
                 name={SCREENS.INVOICE_DETAIL.name}
                 component={SCREENS.INVOICE_DETAIL.component}
                 options={{
-                  headerTitle: 'Invoices',
-                }}
+                      title: t('invoices'),
+                             }}
               />
               <Stack.Screen
                 name={SCREENS.RECEIPT.name}
                 component={SCREENS.RECEIPT.component}
                 options={{
-                  headerTitle: 'Receipt',
-                }}
+                      title: t('receipt_title'),
+                             }}
               />
               <Stack.Screen
                 name={SCREENS.ACCOUNT.name}
                 component={SCREENS.ACCOUNT.component}
                 options={{
-                  headerTitle: 'Account',
-                }}
+                      title: t('account'),
+                             }}
               />
               <Stack.Screen
                 name={SCREENS.PROFILE.name}
                 component={SCREENS.PROFILE.component}
                 options={{
-                  headerTitle: 'Profile',
-                }}
+                      title: t('profile'),
+                             }}
               />
               <Stack.Screen
-                name={SCREENS.CASHIER.name}
-                component={SCREENS.CASHIER.component}
-              />
+                      name={SCREENS.CASHIER.name}
+                      component={SCREENS.CASHIER.component}
+                      options={{
+                      title: t('cashier'),
+                             }}
+                    />
             </Stack.Group>
           ) : (
             <Stack.Group>

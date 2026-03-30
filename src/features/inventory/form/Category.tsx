@@ -11,6 +11,8 @@ import {eventBus} from '@utils';
 import {ImageFluid} from 'src/components/ImageFluid';
 import Config from 'react-native-config';
 import {RootState} from '@redux';
+import {useTranslation} from 'react-i18next';
+
 
 export const Category = () => {
   const colors = useColors();
@@ -18,6 +20,7 @@ export const Category = () => {
   const bottomTabHeight = useBottomTabBarHeight();
   const parentCategoryIconData = getParentCategoryIconData();
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const {t} = useTranslation();
   // const shopId = getShopId();
   const {
     control,
@@ -67,12 +70,12 @@ export const Category = () => {
       }}>
       <Stack direction="column" rowSpace={15}>
         <CategoryNameInput
-          label={'Category Name'}
+          label={t('category_name')}
           control={control}
           errors={errors}
         />
         <ChooseCategoryIcon
-          label={'Choose Category Icon'}
+          label={t('choose_category_icon')}
           control={control}
           setValue={setValue}
           data={parentCategoryIconData}
@@ -98,7 +101,7 @@ export const Category = () => {
       <Stack justify="center" style={{width: '100%', marginTop: 10}}>
         <Button
           colorScheme="green"
-          title="Add"
+          title={t('add')}
           style={{minWidth: 150}}
           onPress={() => handleSubmit(onAdd)()}
         />

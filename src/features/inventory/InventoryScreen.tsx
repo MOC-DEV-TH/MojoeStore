@@ -10,8 +10,11 @@ import {useDispatch} from 'react-redux';
 import {SCREENS, navigate} from '@navigations';
 import {endpoints} from '@services';
 import {eventBus} from '@utils';
+import {useTranslation} from 'react-i18next';
+
 
 export const InventoryScreen = () => {
+  const {t} = useTranslation();
   const isFocused = useIsFocused();
   const colors = useColors();
   const fonts = useFonts();
@@ -37,7 +40,7 @@ export const InventoryScreen = () => {
       <Stack columnSpace={15} style={{paddingHorizontal: SPACING['STANDARD']}}>
         <View style={[styles.amountBox, {borderColor: colors.orange}]}>
           <Text fontStyle="FW400_14" textColor={colors.orange}>
-            Total Categories
+            {t('total_categories')}
           </Text>
           <RNText
             style={{
@@ -50,7 +53,7 @@ export const InventoryScreen = () => {
         </View>
         <View style={[styles.amountBox, {borderColor: colors.deepBlue}]}>
           <Text fontStyle="FW400_14" textColor={colors.deepBlue}>
-            Stock in Hand
+            {t('stock_in_hand')}
           </Text>
           <RNText
             style={{

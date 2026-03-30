@@ -8,8 +8,11 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {createSubCategory, getParentCategoryData} from '@slices';
 import {useDispatch} from 'react-redux';
 import {eventBus} from '@utils';
+import {useTranslation} from 'react-i18next';
+
 
 export const SubCategory = () => {
+  const {t} = useTranslation();
   const colors = useColors();
   const dispatch = useDispatch();
   const bottomTabHeight = useBottomTabBarHeight();
@@ -59,12 +62,12 @@ export const SubCategory = () => {
       }}>
       <Stack direction="column" rowSpace={15}>
         <CategoryNameInput
-          label={'Sub Category Name'}
+          label={t('sub_category_name')}
           control={control}
           errors={errors}
         />
         <ChooseCategoryIcon
-          label={'Choose Parent Category'}
+          label={t('choose_parent_category')}
           control={control}
           setValue={setValue}
           data={categoryData}
@@ -84,7 +87,7 @@ export const SubCategory = () => {
       <Stack justify="center" style={{width: '100%', marginTop: 10}}>
         <Button
           colorScheme="green"
-          title="Add"
+          title={t('add')}
           style={{minWidth: 150}}
           onPress={() => handleSubmit(onAdd)()}
         />

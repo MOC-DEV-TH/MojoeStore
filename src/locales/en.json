@@ -1,18 +1,91 @@
 {
-    "signin": "Sign In",
-    "email": "Email",
-    "password": "Password",
-    "sales_summary": "Sales Summary",
-    "invoices": "Invoices",
-    "cashier": "Cashier",
-    "report": "Report",
-    "profit": "Profit",
-    "filter_by": "Filter By",
-    "day": "Day",
-    "month": "Month",
-    "year": "Year",
-    "filter": "Filter",
-    "scanner": "Scanning Product",
-    "done": "Done",
-    "checkout": "Check Out"
+  "signin": "Sign In",
+  "email": "Email",
+  "password": "Password",
+  "sales_summary": "Sales Summary",
+  "invoices": "Invoices",
+  "cashier": "Cashier",
+  "report": "Report",
+  "profit": "Profit",
+  "filter_by": "Filter By",
+  "day": "Day",
+  "month": "Month",
+  "year": "Year",
+  "filter": "Filter",
+  "scanner": "Scanning Product",
+  "done": "Done",
+  "checkout": "Check Out",
+
+  "welcome": "Welcome",
+  "notification": "Notification",
+
+  "account": "Account",
+  "profile": "Profile",
+
+  "name": "Name",
+  "logout": "Logout",
+  "save": "Save",
+
+  "invoice": "Invoice",
+  "invoice_no": "Invoice No.",
+  "date": "Date",
+  "total": "Total",
+  "total_ks": "Total (Ks)",
+
+  "scan_barcode": "Scan Barcode",
+  "non_barcode_item": "Non Barcode Item",
+  "non_barcode": "Non Barcode",
+
+  "suspend": "Suspend",
+  "total_amount": "Total Amount",
+
+  "start_date": "Start Date",
+  "end_date": "End Date",
+
+  "inventory": "Inventory",
+  "search": "Search",
+  "add_new": "Add New",
+  "total_categories" : "Total Categories",
+  "stock_in_hand" : "Stock in Hand",
+  "edit_product" : "Edit Product",
+
+  "new_product": "New Product",
+  "new_category": "New Category",
+  "category_name": "Category Name",
+  "choose_category_icon": "Choose Category Icon",
+
+  "new_sub_category": "New Sub Category",
+  "sub_category_name": "Sub Category Name",
+  "choose_parent_category": "Choose Parent Category",
+
+  "sku": "SKU",
+  "qty": "Qty",
+  "category": "Category",
+  "buying_price": "Buying Price",
+  "selling_price": "Selling Price",
+
+  "low_stock_notify": "Notify me when stock is low",
+
+  "add": "Add",
+  "basket": "Basket",
+  "dashboard": "Dashboard",
+  "choose" : "Choose",
+  "barcode" : "Barcode",
+  "minimum_qty" : "Minimum Qty", 
+
+  "pay_with" : "Pay With",
+  "ok" : "Ok",
+  "cancel" : "Cancel",
+  "amount_paid" : "Amount Paid",
+  "amount_due" : "Amount Due",
+  "add_discount" : "Add Discount",
+
+  "receipt_title" : "Receipt",
+  "receipt" : "Receipt",
+  "no_receipt" : "No Receipt",
+  "charge" : "Charge", 
+
+  "print" : "Print",
+  "change" : "Change"
+
 }

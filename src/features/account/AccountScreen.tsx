@@ -7,11 +7,15 @@ import {StyleSheet, TouchableOpacity, View, Text as RNText} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
+
 
 export const AccountScreen = () => {
   const colors = useColors();
   const fonts = useFonts();
   const dispatch = useDispatch();
+  const {t} = useTranslation();
+  
 
   return (
     <BaseView backgroundColor={'#f1f3f4'}>
@@ -27,7 +31,7 @@ export const AccountScreen = () => {
               columnGap: 10,
             }}>
             <SvgXml xml={IconSvg.user} width={10} />
-            <RNText style={{...fonts.en.FW600_14, flex: 1}}>Profile</RNText>
+            <RNText style={{...fonts.en.FW600_14, flex: 1}}>{t('profile')}</RNText>
             <Ionicons name="chevron-forward-outline" size={20} />
           </TouchableOpacity>
         </View>
@@ -42,7 +46,7 @@ export const AccountScreen = () => {
               columnGap: 10,
             }}>
             <SvgXml xml={IconSvg.lock} />
-            <RNText style={{...fonts.en.FW600_14, flex: 1}}>Logout</RNText>
+            <RNText style={{...fonts.en.FW600_14, flex: 1}}>{t('logout')}</RNText>
           </TouchableOpacity>
         </View>
       </StandardPadding>

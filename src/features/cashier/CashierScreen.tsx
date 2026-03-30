@@ -12,6 +12,7 @@ import {
 import {useEffect} from 'react';
 import {View, Text as RNText} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 export const CashierScreen = () => {
   const dispatch = useDispatch();
   const colors = useColors();
@@ -19,6 +20,8 @@ export const CashierScreen = () => {
   const pickedProducts = getPickedProducts();
   const isAbleToCheckout = pickedProducts?.length > 0;
   const {onCheckout, totalAmountInfo} = useCashier();
+  const {t} = useTranslation();
+
 
   useEffect(() => {
     return () => {
@@ -52,7 +55,7 @@ export const CashierScreen = () => {
           gap: 10,
         }}>
         <Text fontStyle="FW400_10" textColor={colors.muted} textAlign="center">
-          Total Amount
+          {t('total_amount')}
         </Text>
         <RNText
           style={{
@@ -64,7 +67,7 @@ export const CashierScreen = () => {
         </RNText>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Button
-            title="Check Out"
+            title={t('checkout')}
             colorScheme="green"
             onPress={onCheckout}
             disabled={!isAbleToCheckout}

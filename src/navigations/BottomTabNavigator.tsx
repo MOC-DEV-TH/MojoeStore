@@ -5,23 +5,28 @@ import {IconSvg} from '@svgs';
 import {BasketStack, DashboardStack, InventoryStack} from './Stacks';
 import {StyleSheet, Text, View} from 'react-native';
 import {getPickedProducts, getTotalSuspendCount} from '@slices';
+import {useTranslation} from 'react-i18next';
+
 
 const Tab = createBottomTabNavigator();
 
 export const BottomTabNavigator = () => {
   const colors = useColors();
+  const {t} = useTranslation();
+  
 
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: String(colors.primary),
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
       }}>
       <Tab.Screen
         name={'DashboardTab'}
         component={DashboardStack}
         options={{
           headerShown: false,
+          tabBarLabel: t('dashboard'),
           tabBarIcon: ({focused, color}) =>
             focused ? (
               <SvgXml xml={IconSvg.activeDashboard} color={'#fff'} />
@@ -35,6 +40,7 @@ export const BottomTabNavigator = () => {
         component={InventoryStack}
         options={{
           headerShown: false,
+          tabBarLabel: t('inventory'),
           tabBarIcon: ({focused, color}) =>
             focused ? (
               <SvgXml xml={IconSvg.activeBoxes} color={'#fff'} />
@@ -48,6 +54,7 @@ export const BottomTabNavigator = () => {
         component={BasketStack}
         options={{
           headerShown: false,
+          tabBarLabel: t('basket'),
           tabBarIcon: ({focused, color}) => {
             const fonts = useFonts();
             const totalBasket = getTotalSuspendCount();

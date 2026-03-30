@@ -48,6 +48,8 @@ import {useForm} from 'react-hook-form';
 import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
+
 
 type CashierProviderProps = {
   children: ReactNode;
@@ -56,6 +58,7 @@ type CashierProviderProps = {
 const ThemeContext = createContext<any>(null);
 
 export const CashierProvider: FC<CashierProviderProps> = props => {
+  const {t} = useTranslation();
   const {children} = props;
   const [currentItem, setCurrentItem] = useState<any>({});
   const [discountMessage, setDiscountMessage] = useState('');
@@ -63,6 +66,8 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
     paymentType: null,
     value: null,
     invoiceId: null,
+    paidAmount: null,
+    changeAmount : null
   });
   const pickedProducts = getPickedProducts();
   const totalAmountInfo = getTotalAmountInfo();
@@ -241,9 +246,11 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
           amountDueModalRef?.current?.close();
           amountDueReceiptModalRef?.current?.open();
           setDueAmountInfo({
-            value: value,
-            invoiceId: respond,
-          });
+  value: value,
+  invoiceId: respond,
+  paidAmount: amountDueValue,
+  changeAmount: Math.abs(value),
+});
           dispatch(
             updateTotalAmount({
               amount: '',
@@ -270,7 +277,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
             fontStyle="FW600_16"
             textAlign="center"
             style={{marginBottom: 30}}>
-            Add Discount
+            {t('add_discount')}
           </Text>
           {/* Form */}
           <Stack justify="space-between">
@@ -307,7 +314,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
       <CustomBottomModal ref={payWithModalRef}>
         <View style={{marginBottom: 30}}>
           <Text fontStyle="FW600_16" textAlign="center">
-            Pay With
+            {t('pay_with')}
           </Text>
         </View>
         <Stack columnSpace={10}>
@@ -337,7 +344,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
       <CustomBottomModal ref={amountDueModalRef}>
         <View style={{marginBottom: 10, flexDirection: 'column', rowGap: 20}}>
           <Text fontStyle="FW600_14" textAlign="center">
-            Amount Due
+            {t('amount_due')}
           </Text>
           <View>
             <Text
@@ -356,12 +363,13 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
             )}
           </View>
           <Text fontStyle="FW600_14" textAlign="center">
-            Amount Paid
+            {t('amount_paid')}
           </Text>
         </View>
         <AppTextFiled
           name="amountDue"
           control={amountDueControl}
+          type="number"
           require
           error={amountDueErrors?.amountDue?.message}
           inputStyle={{textAlign: 'center'}}
@@ -369,7 +377,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
         <Stack columnSpace={10} style={{marginTop: 30, marginBottom: 10}}>
           <View style={{flex: 1}}>
             <Button
-              title="Ok"
+              title={t('ok')}
               colorScheme="green"
               onPress={amountDueHandleSubmit(onAmountDueSubmit)}
               fullwidth
@@ -377,7 +385,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
           </View>
           <View style={{flex: 1}}>
             <Button
-              title="Cancel"
+              title={t('cancel')}
               colorScheme="primary"
               fullwidth
               onPress={() => {
@@ -388,7 +396,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
           </View>
         </Stack>
         <Button
-          title="Add Discount"
+          title={t('add_discount')}
           onPress={() => {
             showDiscountModal();
             isDiscountModalForTotal.current = true;
@@ -401,12 +409,12 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
       <CustomBottomModal ref={amountDueReceiptModalRef}>
         <View style={{marginBottom: 10, flexDirection: 'column', rowGap: 20}}>
           <Text fontStyle="FW600_14" textAlign="center">
-            Amount Due
+            {t('amount_due')}
           </Text>
         </View>
         <View>
           <Text fontStyle="FW400_12" textAlign="center">
-            Charge
+            {t('change')}
           </Text>
           <Text
             fontStyle="FW400_12"
@@ -416,10 +424,12 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
           </Text>
         </View>
         <Button
-          title="Receipt"
+          title={t('receipt')}
           onPress={() => {
             navigate(SCREENS.RECEIPT.name, {
               invoiceId: dueAmountInfo?.invoiceId,
+              paidAmount: dueAmountInfo?.paidAmount,
+              changeAmount: dueAmountInfo?.changeAmount,
             });
             eventBus.emit(EMIT_TAGS.SUSPEND);
             amountDueReceiptModalRef?.current?.close();
@@ -429,7 +439,7 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
           style={{marginBottom: 10}}
         />
         <Button
-          title="No Receipt"
+          title={t('no_receipt')}
           onPress={() => {
             Alert.alert('Are you sure ?', '', [
               {
@@ -438,6 +448,8 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
                   navigate(SCREENS.RECEIPT.name, {
                     invoiceId: dueAmountInfo?.invoiceId,
                     type: 'no-receipt',
+                    paidAmount: dueAmountInfo?.paidAmount,
+                    changeAmount: dueAmountInfo?.changeAmount,
                   });
                   eventBus.emit(EMIT_TAGS.SUSPEND);
                   amountDueReceiptModalRef?.current?.close();

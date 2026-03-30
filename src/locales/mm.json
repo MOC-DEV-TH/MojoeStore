@@ -14,5 +14,78 @@
     "filter": "ရွေးမည်",
     "scanner": "စကန် ဖတ်နေသည်",
     "done": "အိုကေ",
-    "checkout": "ပေးမည်"
+    "checkout": "ငွေရှင်းမည်",
+
+    "welcome": "မင်္ဂလာပါ",
+  "notification": "အသိပေးချက်",
+
+  "account": "အကောင့်",
+  "profile": "ပရိုဖိုင်",
+
+  "name": "အမည်",
+  "logout": "ထွက်မည်",
+  "save": "သိမ်းမည်",
+
+  "invoice": "ဘောင်ချာ",
+  "invoice_no": "ဘောင်ချာနံပါတ်",
+  "date": "ရက်စွဲ",
+  "total": "စုစုပေါင်း",
+  "total_ks": "စုစုပေါင်း (ကျပ်)",
+
+  "scan_barcode": "ဘားကုဒ်ဖတ်ရန်",
+  "non_barcode_item": "ဘားကုဒ်မပါသောပစ္စည်း",
+  "non_barcode": "ဘာကုဒ်မပါ",
+
+  "suspend": "ခေတ္တရပ်ဆိုင်း",
+  "total_amount": "စုစုပေါင်းကျသင့်ငွေ",
+
+  "start_date": "စမည့်ရက်",
+  "end_date": "ဆုံးမည့်ရက်",
+
+  "inventory": "ပစ္စည်းစာရင်း",
+  "search": "ရှာဖွေရန်",
+  "add_new": "အသစ်ထည့်ရန်",
+  "total_categories" : "အမျိုးအစားစုစုပေါင်း",
+  "stock_in_hand" : "လက်ရှိလက်ကျန်ပစ္စည်း",
+  "edit_product" : "ပစ္စည်းပြင်ဆင်ရန်",
+
+  "new_product": "ကုန်ပစ္စည်းအသစ်",
+  "new_category": "အမျိုးအစားအသစ်",
+  "category_name": "အမျိုးအစားအမည်",
+  "choose_category_icon": "အိုင်ကွန်ရွေးရန်",
+
+  "new_sub_category": "အမျိုးအစားခွဲအသစ်",
+  "sub_category_name": "အမျိုးအစားခွဲအမည်",
+  "choose_parent_category": "ပင်မအမျိုးအစားရွေးရန်",
+
+  "sku": "ကုဒ် (SKU)",
+  "qty": "အရေအတွက်",
+  "category": "အမျိုးအစား",
+  "buying_price": "ဝယ်စျေး",
+  "selling_price": "ရောင်းစျေး",
+
+  "low_stock_notify": "လက်ကျန်နည်းလာပါက အသိပေးရန်",
+
+  "add": "ထည့်မည်",
+  "basket": "ခြင်းတောင်း",
+  "dashboard": "ပင်မစာမျက်နှာ",
+  "choose" : "ရွေးချယ်ရန်",
+  "barcode" : "ဘားကုဒ်",
+  "minimum_qty" : "အနည်းဆုံး အရေအတွက်",
+
+  "pay_with" : "ငွေပေးချေမည့်နည်းလမ်း",
+   "ok" : "အိုကေ",
+  "cancel" : "ပယ်ဖျက်မည်",
+  "amount_paid" : "ပေးပြီးငွေ",
+  "amount_due" : "ပေးရန်ကျန်ငွေ",
+  "add_discount" : "လျှော့စျေးထည့်ရန်",
+
+  "receipt_title" : "ပြေစာ",
+  "receipt" : "ပြေစာယူမယ်",
+  "no_receipt" : "ပြေစာမယူပါ",
+  "charge" : "ကောက်ခံငွေ",
+
+  "print" : "ပရင့်ထုတ်ရန်",
+
+  "change" : "ပြန်အမ်းငွေ"
 }

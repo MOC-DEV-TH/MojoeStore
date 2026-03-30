@@ -20,8 +20,11 @@ import {useDispatch} from 'react-redux';
 import {createProduct, showMessageErrorRoot, updateProduct} from '@slices';
 import {camelToSnakeCase, convertSelectOptions, eventBus} from '@utils';
 import {endpoints} from '@services';
+import {useTranslation} from 'react-i18next';
+
 
 export const Product = ({fillData}: any) => {
+  const {t} = useTranslation();
   const colors = useColors();
   const dispatch = useDispatch();
   const bottomTabHeight = useBottomTabBarHeight();
@@ -175,7 +178,7 @@ export const Product = ({fillData}: any) => {
           <Button
             onPress={() => handleSubmit(onAdd)()}
             colorScheme="green"
-            title={fillData ? 'Done' : 'Add'}
+            title={fillData ? t('done') : t('add')}
             style={{minWidth: 150}}
           />
         </Stack>

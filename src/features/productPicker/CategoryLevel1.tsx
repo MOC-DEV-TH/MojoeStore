@@ -7,8 +7,10 @@ import {endpoints} from '@services';
 import {useIsFocused} from '@react-navigation/native';
 import {eventBus} from '@utils';
 import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 
 export const CategoryLevel1 = () => {
+  const {t} = useTranslation();
   const isFocused = useIsFocused();
   const {data, onSearch, isLoading, fetch} = useCategorySearch({
     url: endpoints.common.getParentCategory,
@@ -24,7 +26,7 @@ export const CategoryLevel1 = () => {
 
   return (
     <SearchBaseView
-      title="Non-Barcode Items"
+      title={t('non_barcode_item')}
       onSearch={onSearch}
       style={{
         columnGap: 11,

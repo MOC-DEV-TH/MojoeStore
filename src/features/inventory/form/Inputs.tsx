@@ -25,12 +25,15 @@ import Config from 'react-native-config';
 import {SvgXml} from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ImageFluid} from 'src/components/ImageFluid';
+import {useTranslation} from 'react-i18next';
+
 
 export const ProductNameInput = ({errors, ...props}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{width: '100%'}}>
       <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-        Name*
+        {t('name')}*
       </Text>
       <AppTextFiled
         name="name"
@@ -44,10 +47,11 @@ export const ProductNameInput = ({errors, ...props}: any) => {
 };
 
 export const SkuInput = ({errors, ...props}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{width: '100%'}}>
       <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-        SKU
+        {t('sku')}
       </Text>
       <AppTextFiled
         name="sku"
@@ -61,10 +65,11 @@ export const SkuInput = ({errors, ...props}: any) => {
 };
 
 export const QtyInput = ({control, errors}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{width: '100%'}}>
       <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-        Qty
+        {t('qty')}
       </Text>
       <AppTextFiled
         type="number"
@@ -79,10 +84,11 @@ export const QtyInput = ({control, errors}: any) => {
 };
 
 export const CategorySelect = ({control, data, errors}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{width: '100%'}}>
       <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-        Category
+        {t('category')}
       </Text>
       <AppSelectField
         data={data}
@@ -97,10 +103,11 @@ export const CategorySelect = ({control, data, errors}: any) => {
 };
 
 export const BuyingPrice = ({control, errors}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{width: '100%'}}>
       <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-        Buying Price
+        {t('buying_price')}
       </Text>
       <AppTextFiled
         name="buyingPrice"
@@ -115,10 +122,11 @@ export const BuyingPrice = ({control, errors}: any) => {
 };
 
 export const SellingPrice = ({control, errors}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{width: '100%'}}>
       <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-        Selling Price
+        {t('selling_price')}
       </Text>
       <AppTextFiled
         name="sellingPrice"
@@ -137,6 +145,7 @@ export const BarcodeNonBarcode = ({control, setValue, errors, watch}: any) => {
   const colors = useColors();
   const barcodeType = Number(watch('barcodeType'));
   const [isScanBarCode, setIsScanBarCode] = useState(Boolean(barcodeType));
+  const {t} = useTranslation();
 
   useEffect(() => {
     setValue('barcodeType', isScanBarCode ? 1 : 0);
@@ -180,7 +189,7 @@ export const BarcodeNonBarcode = ({control, setValue, errors, watch}: any) => {
             justifyContent: 'center',
           }}>
           <Text textColor={isScanBarCode ? colors.black : colors.color8C8C8C}>
-            Scan Barcode
+            {t('scan_barcode')}
           </Text>
           <SvgXml
             xml={IconSvg.qr(
@@ -209,13 +218,13 @@ export const BarcodeNonBarcode = ({control, setValue, errors, watch}: any) => {
             justifyContent: 'center',
           }}>
           <Text textColor={!isScanBarCode ? colors.black : colors.color8C8C8C}>
-            Non-Barcode
+            {t('non_barcode')}
           </Text>
         </TouchableOpacity>
       </Stack>
       <View style={{width: '100%'}}>
         <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-          Barcode
+          {t('barcode')}
         </Text>
 
         <AppTextFiled
@@ -237,6 +246,7 @@ export const NotifyStockInput = ({control, watch, setValue}: any) => {
   const minimumQtyType = Number(watch('minimumQtyType'));
   const [isChecked, setIsChecked] = useState(false);
   const colors = useColors();
+  const {t} = useTranslation();
 
   useEffect(() => {
     setValue('minimumQtyType', isChecked ? 1 : 0);
@@ -275,13 +285,13 @@ export const NotifyStockInput = ({control, watch, setValue}: any) => {
           )}
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text fontStyle="FW400_12">Notify me when stock is low</Text>
+          <Text fontStyle="FW400_12">{t('low_stock_notify')}</Text>
         </TouchableOpacity>
       </Stack>
       {isChecked && (
         <>
           <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-            Minimum Qty
+            {t('minimum_qty')}
           </Text>
           <AppTextFiled type="number" control={control} name="minimumQty" />
         </>
@@ -320,6 +330,7 @@ export const ChooseCategoryIcon = ({
   const windowHeight = Dimensions.get('window').height;
   const watchingValue = watch('categoryIcon');
   const [selectedItem, setSelectedItem]: any = useState();
+  const {t} = useTranslation();
 
   const onChoose = (item: any) => {
     setSelectedItem(item);
@@ -343,7 +354,7 @@ export const ChooseCategoryIcon = ({
           {label}
         </Text>
         <Button
-          title="Choose"
+          title={t('choose')}
           colorScheme="colorA3A3A3"
           onPress={() => chooseCategoryModalRef?.current?.open()}
         />
@@ -369,7 +380,7 @@ export const ChooseCategoryIcon = ({
           }}>
           <View style={{marginBottom: 20, paddingTop: SPACING['STANDARD']}}>
             <Text fontStyle="FW600_16" textAlign="left">
-              Choose Category
+              {t('choose_category_icon')}
             </Text>
           </View>
 

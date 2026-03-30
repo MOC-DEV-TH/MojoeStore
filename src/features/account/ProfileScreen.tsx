@@ -14,8 +14,12 @@ import {useForm} from 'react-hook-form';
 import {StyleSheet, View, Text as RNText} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
+
+
 
 export const ProfileScreen = () => {
+  const {t} = useTranslation();
   const {
     control,
     reset,
@@ -74,7 +78,7 @@ export const ProfileScreen = () => {
           }}>
           <View style={{width: '100%', marginBottom: 20}}>
             <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-              Name
+              {t('name')}
             </Text>
             <AppTextFiled
               name="name"
@@ -85,7 +89,7 @@ export const ProfileScreen = () => {
           </View>
           <View style={{width: '100%'}}>
             <Text fontStyle="FW400_12" style={{paddingBottom: 6}}>
-              Email
+              {t('email')}
             </Text>
             <AppTextFiled
               name="email"
@@ -103,7 +107,7 @@ export const ProfileScreen = () => {
               marginTop: 100,
             }}>
             <Button
-              title="Save"
+              title={t('save')}
               colorScheme="green"
               style={{minWidth: 150}}
               onPress={handleSubmit(onSubmit)}

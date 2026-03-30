@@ -1,12 +1,7 @@
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SCREENS, navigate} from '@navigations';
-import {
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-  Text as RNText,
-  View,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text as RNText, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {LanguageSwitcher, Stack as Row, Text} from '@components';
 import {useColors, useFonts} from '@hooks';
@@ -15,19 +10,22 @@ import {SvgXml} from 'react-native-svg';
 import {getUserInfo, toggleInventorySearchBox} from '@slices';
 import {RootState} from '@redux';
 import {isOwner} from '@utils';
+import {useTranslation} from 'react-i18next';
+
 
 const Stack = createNativeStackNavigator();
 
 export function DashboardStack() {
   const colors = useColors();
   const fonts = useFonts();
+  const {t} = useTranslation();
 
   const DashboardLeftHeader = () => {
     const userInfo = getUserInfo();
     return (
       <View>
         <RNText style={{...fonts.en.FW600_12, color: colors.black}}>
-          Welcome,
+          {t('welcome')},
         </RNText>
         <RNText
           style={{
@@ -35,7 +33,7 @@ export function DashboardStack() {
             color: colors.black,
           }}
           numberOfLines={1}>
-          {userInfo?.name}
+          {(userInfo as any)?.name}
         </RNText>
       </View>
     );
@@ -85,14 +83,31 @@ export function DashboardStack() {
       <Stack.Screen
         name={SCREENS.NOTIFICATION.name}
         component={SCREENS.NOTIFICATION.component}
+        options={{
+        title: t('notification'),
+               }}
       />
+      <Stack.Screen
+        name={SCREENS.ACCOUNT.name}
+        component={SCREENS.ACCOUNT.component}
+        options={{
+        title: t('account'),
+               }}
+      />
+      
       <Stack.Screen
         name={SCREENS.INVOICE.name}
         component={SCREENS.INVOICE.component}
+        options={{
+        title: t('invoices'),
+               }}
       />
       <Stack.Screen
         name={SCREENS.REPORT.name}
         component={SCREENS.REPORT.component}
+        options={{
+        title: t('report'),
+               }}
       />
     </Stack.Navigator>
   );
@@ -101,6 +116,7 @@ export function DashboardStack() {
 export function InventoryStack() {
   const dispatch = useDispatch();
   const isOwnerRole = isOwner();
+  const {t} = useTranslation();
 
   const InventoryRightHeader = () => {
     return (
@@ -126,7 +142,7 @@ export function InventoryStack() {
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">Inventroy</Text>,
+          headerLeft: () => <Text fontStyle="FW600_20">{t('inventory')}</Text>,
           headerRight: () => <InventoryRightHeader />,
         }}
       />
@@ -136,9 +152,10 @@ export function InventoryStack() {
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">Inventroy</Text>,
+          headerLeft: () => <Text fontStyle="FW600_20">{t('inventory')}</Text>,
           headerRight: () => <InventoryRightHeader />,
         }}
+        
       />
       <Stack.Screen
         name={SCREENS.INVENTORY_PRODUCT.name}
@@ -146,7 +163,7 @@ export function InventoryStack() {
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">Inventroy</Text>,
+          headerLeft: () => <Text fontStyle="FW600_20">{t('inventory')}</Text>,
           headerRight: () => <InventoryRightHeader />,
         }}
       />
@@ -157,7 +174,7 @@ export function InventoryStack() {
           headerShown: true,
           headerShadowVisible: false,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">Add New</Text>,
+          headerLeft: () => <Text fontStyle="FW600_20">{t('add_new')}</Text>,
         }}
       />
       <Stack.Screen
@@ -166,7 +183,7 @@ export function InventoryStack() {
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">Edit Product</Text>,
+          headerLeft: () => <Text fontStyle="FW600_20">{t('edit_product')}</Text>,
         }}
       />
     </Stack.Navigator>
@@ -174,6 +191,7 @@ export function InventoryStack() {
 }
 
 export function BasketStack() {
+  const {t} = useTranslation();
   return (
     <Stack.Navigator initialRouteName={SCREENS.INVENTORY.name}>
       <Stack.Screen
@@ -182,7 +200,7 @@ export function BasketStack() {
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">Basket</Text>,
+          headerLeft: () => <Text fontStyle="FW600_20">{t('basket')}</Text>,
         }}
       />
     </Stack.Navigator>

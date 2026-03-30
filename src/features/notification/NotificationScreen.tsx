@@ -6,8 +6,11 @@ import {SPACING} from '@constants';
 import {endpoints} from '@services';
 import {useInfinite} from '@hooks';
 import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+
 
 export const NotificationsScreen = () => {
+  const {t} = useTranslation();
   const {data, response, fetchData, fetchNextPage, onRefresh, isRefreshing} =
     useInfinite({
       classify: 'data',

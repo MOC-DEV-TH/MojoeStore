@@ -6,8 +6,10 @@ import {BackHandler, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {SPACING} from '@constants';
 import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 export const InventorySearchBox = ({onSearch}: any) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const isSearchShow = isSearchBoxShow();
   const {watch, control} = useForm({
@@ -34,7 +36,7 @@ export const InventorySearchBox = ({onSearch}: any) => {
       onPress={onClose}
       style={styles.container}>
       <View style={styles.modal}>
-        <Text style={{paddingBottom: 10}}>Search</Text>
+        <Text style={{paddingBottom: 10}}>{t('search')}</Text>
         <AppTextFiled name="search" control={control} />
       </View>
     </TouchableOpacity>
