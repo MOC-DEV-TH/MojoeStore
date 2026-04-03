@@ -70,20 +70,28 @@ export const ReceiptScreen = ({route}: any) => {
   const items = data?.order?.order_items ?? [];
 
   const subtotalAmount = () => {
-    return items.reduce((sum: number, item: any) => {
-      const qty = Number(item?.qty ?? 0);
-      const price = Number(item?.product?.selling_price ?? 0);
-      return sum + qty * price;
-    }, 0);
-  };
+  return items.reduce((sum: number, item: any) => {
+    const qty = Number(item?.qty ?? 0);
+    const price = Number(item?.selling_price ?? 0);
+    return sum + qty * price;
+  }, 0);
+};
+
+const totalAmount = () => {
+  return Number(data?.total_price ?? 0);
+};
+
+const totalDiscountAmount = () => {
+  return subtotalAmount() - totalAmount();
+};
 
   const getDiscountText = () => {
-    if (data?.discount_amount == null) return '-';
+  const discount = totalDiscountAmount();
 
-    return `${formatMoney(data?.discount_amount)} ${
-      data?.discount_type === 0 ? 'Ks' : '%'
-    }`;
-  };
+  if (discount <= 0) return '-';
+
+  return `${formatMoney(discount)} Ks`;
+};
 
   const padRight = (text: string, length: number) => {
     const value = String(text ?? '');
@@ -128,8 +136,6 @@ export const ReceiptScreen = ({route}: any) => {
     text += twoCol(`Invoice: #${data?.invoice_no ?? '-'}`, formatDate(data?.created_at)) + '\n';
     text += twoCol('Payment: ' + (data?.payment_type ?? '-'), formatTime(data?.created_at)) + '\n';
     text += twoCol('Account Name: ', (userInfo as any)?.name)  + '\n';
-    text += twoCol('Paid Amount: ', paidAmount ) + '\n';
-    text += twoCol('Change Amount: ', changeAmount ) + '\n';
     text += `${line}\n`;
     text += row4Col('Item', 'qty', 'price', 'amount') + '\n';
     text += `${line}\n`;
@@ -166,6 +172,8 @@ export const ReceiptScreen = ({route}: any) => {
     text += twoCol('TOTAL', `${formatMoney(data?.total_price ?? 0)} Ks`) + '\n';
     text += '[C]================================\n';
     text += twoCol('Payment Type', `${data?.payment_type ?? '-'}`) + '\n';
+    text += twoCol('Paid Amount: ', paidAmount ) + '\n';
+    text += twoCol('Change Amount: ', changeAmount ) + '\n';
     text += `${line}\n`;
     text += '[C]Thank you\n';
     text += '\n\n\n';
@@ -338,25 +346,6 @@ export const ReceiptScreen = ({route}: any) => {
                   </Text>
                 </Stack>
 
-                <Stack justify="space-between" style={{marginTop: 6}}>
-                  <Text style={styles.metaText}>
-                    Paid Amount: 
-                  </Text>
-                  <Text style={styles.metaText}>
-                    {paidAmount}
-                  </Text>
-                </Stack>
-
-
-                <Stack justify="space-between" style={{marginTop: 6}}>
-                  <Text style={styles.metaText}>
-                    Change Amount: 
-                  </Text>
-                  <Text style={styles.metaText}>
-                    {changeAmount}
-                  </Text>
-                </Stack>
-
                 
 
                 <View style={[styles.dashedDivider, {marginTop: 12}]} />
@@ -418,14 +407,11 @@ export const ReceiptScreen = ({route}: any) => {
                 </Stack>
 
                 <Stack justify="space-between" style={styles.summaryRow}>
-                  <Text style={styles.summaryLabel}>Discount</Text>
-                  <Text style={[styles.summaryValue, {color: '#d57a1f'}]}>
-                    {Number(data?.discount_amount ?? 0) > 0
-                      ? `-${getDiscountText()}`
-                      : '-'}
-                  </Text>
-                </Stack>
-
+  <Text style={styles.summaryLabel}>Discount</Text>
+  <Text style={[styles.summaryValue, {color: '#d57a1f'}]}>
+    {totalDiscountAmount() > 0 ? `-${getDiscountText()}` : '-'}
+  </Text>
+</Stack>
                 <View style={styles.boldDivider} />
 
                 <Stack justify="space-between" style={styles.summaryRow}>
@@ -443,6 +429,25 @@ export const ReceiptScreen = ({route}: any) => {
                     {data?.payment_type ?? '-'}
                   </Text>
                 </Stack>
+                <Stack justify="space-between" style={{marginTop: 6}}>
+                  <Text style={styles.metaText}>
+                    Paid Amount: 
+                  </Text>
+                  <Text style={styles.metaText}>
+                    {paidAmount}
+                  </Text>
+                </Stack>
+
+
+                <Stack justify="space-between" style={{marginTop: 6}}>
+                  <Text style={styles.metaText}>
+                    Change Amount: 
+                  </Text>
+                  <Text style={styles.metaText}>
+                    {changeAmount}
+                  </Text>
+                </Stack>
+
 
                 <View style={[styles.dashedDivider, {marginTop: 14}]} />
 
