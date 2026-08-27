@@ -45,11 +45,16 @@ import {
   useState,
 } from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-
 
 type CashierProviderProps = {
   children: ReactNode;
@@ -60,21 +65,26 @@ const ThemeContext = createContext<any>(null);
 export const CashierProvider: FC<CashierProviderProps> = props => {
   const {t} = useTranslation();
   const {children} = props;
+
   const [currentItem, setCurrentItem] = useState<any>({});
   const [discountMessage, setDiscountMessage] = useState('');
+
   const [dueAmountInfo, setDueAmountInfo] = useState<any>({
     paymentType: null,
     value: null,
     invoiceId: null,
     paidAmount: null,
-    changeAmount : null
+    changeAmount: null,
   });
+
   const pickedProducts = getPickedProducts();
   const totalAmountInfo = getTotalAmountInfo();
+
   const discountModalRef: any = useRef();
   const payWithModalRef: any = useRef();
   const amountDueModalRef: any = useRef();
   const amountDueReceiptModalRef: any = useRef();
+
   const colors = useColors();
   const dispatch = useDispatch();
   const shopId = getShopId();
@@ -106,22 +116,62 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
     },
   });
 
+  /*
+   * NEW:
+   * Remember previous number of products.
+   *
+   * If user adds another product, clear previous
+   * discount input value from the discount modal.
+   */
+  const previousPickedProductCount = useRef(pickedProducts.length);
+
   // update total Amount
   useEffect(() => {
-    const caculatedTotalAmount = getCaculatedTotalAmount(pickedProducts);
-    const temp_totalAmount = {...totalAmountInfo, amount: caculatedTotalAmount};
+    const caculatedTotalAmount =
+      getCaculatedTotalAmount(pickedProducts);
+
+    const temp_totalAmount = {
+      ...totalAmountInfo,
+      amount: caculatedTotalAmount,
+    };
+
+    /*
+     * Clear previous entered discount form value
+     * only when a NEW product is added.
+     *
+     * Example:
+     * 2 items -> 3 items = clear
+     * quantity 1 -> 2 = don't clear
+     * remove item = don't clear
+     */
+    if (
+      pickedProducts.length >
+      previousPickedProductCount.current
+    ) {
+      reset({
+        discountAmount: '',
+        discountType: 0,
+      });
+    }
+
+    previousPickedProductCount.current =
+      pickedProducts.length;
+
     dispatch(updateTotalAmount(temp_totalAmount));
   }, [pickedProducts]);
 
-  //Discount Modal
+  // Discount Modal
   const showDiscountModal = (currentItem?: any) => {
     const discountType = currentItem?.discount_type;
+
     if (discountType) {
       reset({
         discountType: discountType,
       });
     }
+
     discountModalRef?.current?.open();
+
     currentItem && setCurrentItem(currentItem);
   };
 
@@ -130,12 +180,22 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
     let type = data.discountType;
 
     if (isDiscountModalForTotal.current) {
-      if (amount !== '0' && type === DISCOUNT_TYPE.KYAT) {
-        setDiscountMessage(`${amount} MMK Discount Added`);
+      if (
+        amount !== '0' &&
+        type === DISCOUNT_TYPE.KYAT
+      ) {
+        setDiscountMessage(
+          `${amount} MMK Discount Added`,
+        );
       }
 
-      if (amount !== '0' && type === DISCOUNT_TYPE.PERCENT) {
-        setDiscountMessage(`${amount}% Discount Added`);
+      if (
+        amount !== '0' &&
+        type === DISCOUNT_TYPE.PERCENT
+      ) {
+        setDiscountMessage(
+          `${amount}% Discount Added`,
+        );
       }
 
       if (amount === '0') {
@@ -154,7 +214,8 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
     } else {
       if (
         amount === '0' &&
-        (type === DISCOUNT_TYPE.PERCENT || type === DISCOUNT_TYPE.KYAT)
+        (type === DISCOUNT_TYPE.PERCENT ||
+          type === DISCOUNT_TYPE.KYAT)
       ) {
         amount = null;
         type = null;
@@ -162,8 +223,12 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
 
       if (
         currentItem &&
-        currentItem.hasOwnProperty('discount_amount') &&
-        currentItem.hasOwnProperty('discount_type')
+        currentItem.hasOwnProperty(
+          'discount_amount',
+        ) &&
+        currentItem.hasOwnProperty(
+          'discount_type',
+        )
       ) {
         dispatch(
           updateProductItem({
@@ -188,69 +253,144 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
       ...dueAmountInfo,
       paymentType,
     });
+
     payWithModalRef?.current?.close();
     amountDueModalRef?.current?.open();
   };
 
-  const onAmountDueSubmit = ({amountDue}: any) => {
-    const finalTotalAmount = getCaculatedTotalAmountDue(totalAmountInfo);
-    const amountDueValue = parseInt(amountDue);
+  const onAmountDueSubmit = ({
+    amountDue,
+  }: any) => {
+    const finalTotalAmount =
+      getCaculatedTotalAmountDue(
+        totalAmountInfo,
+      );
 
-    if (finalTotalAmount > amountDueValue) {
-      return amountDueSetError('amountDue', {
-        message: 'Amount is Invalid',
-      });
+    const amountDueValue =
+      parseInt(amountDue);
+
+    if (
+      finalTotalAmount >
+      amountDueValue
+    ) {
+      return amountDueSetError(
+        'amountDue',
+        {
+          message: 'Amount is Invalid',
+        },
+      );
     }
-    const invoiceDiscountType = totalAmountInfo?.discount_type;
-    const invoiceDiscountAmount = totalAmountInfo?.discount_amount || 0;
-    const value = finalTotalAmount - amountDueValue;
-    const paymentType = dueAmountInfo.paymentType;
-    const products = pickedProducts.map(
-      ({
-        id,
-        addedQty,
-        buying_price,
-        selling_price,
-        discount_amount,
-        discount_type,
-      }): any => ({
-        product_id: id,
-        quantity: addedQty,
-        buying_price: parseInt(buying_price),
-        selling_price: parseInt(selling_price),
-        discount_amount: parseInt(discount_amount) || 0,
-        discount_type: discountTypeToNumber(discount_type),
-        total: getItemTotalPrice({
-          pricePerUnit: parseInt(selling_price),
-          qty: addedQty,
-          discountAmount: parseInt(discount_amount) || 0,
-          discountType: discountTypeToNumber(discount_type),
+
+    const invoiceDiscountType =
+      totalAmountInfo?.discount_type;
+
+    const invoiceDiscountAmount =
+      totalAmountInfo?.discount_amount || 0;
+
+    const value =
+      finalTotalAmount -
+      amountDueValue;
+
+    const paymentType =
+      dueAmountInfo.paymentType;
+
+    const products =
+      pickedProducts.map(
+        ({
+          id,
+          addedQty,
+          buying_price,
+          selling_price,
+          discount_amount,
+          discount_type,
+        }): any => ({
+          product_id: id,
+
+          quantity: addedQty,
+
+          buying_price:
+            parseInt(buying_price),
+
+          selling_price:
+            parseInt(selling_price),
+
+          discount_amount:
+            parseInt(discount_amount) ||
+            0,
+
+          discount_type:
+            discountTypeToNumber(
+              discount_type,
+            ),
+
+          total: getItemTotalPrice({
+            pricePerUnit:
+              parseInt(selling_price),
+
+            qty: addedQty,
+
+            discountAmount:
+              parseInt(
+                discount_amount,
+              ) || 0,
+
+            discountType:
+              discountTypeToNumber(
+                discount_type,
+              ),
+          }),
         }),
-      }),
-    );
+      );
 
     const body = {
-      ...(orderNumber ? {order_no: orderNumber} : {}),
-      total_price: finalTotalAmount,
-      products: JSON.stringify(products),
-      payment_type: paymentType,
-      shop_id: shopId,
-      invoice_discount_amount: parseInt(invoiceDiscountAmount),
-      invoice_discount_type: discountTypeToNumber(invoiceDiscountType),
+      ...(orderNumber
+        ? {
+            order_no:
+              orderNumber,
+          }
+        : {}),
+
+      total_price:
+        finalTotalAmount,
+
+      products:
+        JSON.stringify(products),
+
+      payment_type:
+        paymentType,
+
+      shop_id:
+        shopId,
+
+      invoice_discount_amount:
+        parseInt(
+          invoiceDiscountAmount,
+        ),
+
+      invoice_discount_type:
+        discountTypeToNumber(
+          invoiceDiscountType,
+        ),
     };
 
     dispatch(
       attemptCheckout({
         body: body,
+
         onSuccess: (respond: any) => {
           amountDueModalRef?.current?.close();
+
           amountDueReceiptModalRef?.current?.open();
+
           setDueAmountInfo({
-  value: value,
-  invoiceId: respond,
-  paidAmount: amountDueValue,
-  changeAmount: Math.abs(value),
-});
+            value: value,
+            invoiceId: respond,
+            paidAmount:
+              amountDueValue,
+            changeAmount:
+              Math.abs(value),
+          });
+
           dispatch(
             updateTotalAmount({
               amount: '',
@@ -258,9 +398,19 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
               discount_type: null,
             }),
           );
-          dispatch(clearPickedProduct());
-          dispatch(setCurrentOrderNumber(null));
+
+          dispatch(
+            clearPickedProduct(),
+          );
+
+          dispatch(
+            setCurrentOrderNumber(
+              null,
+            ),
+          );
+
           setDiscountMessage('');
+
           amountDueReset();
         },
       }),
@@ -269,204 +419,457 @@ export const CashierProvider: FC<CashierProviderProps> = props => {
 
   return (
     <ThemeContext.Provider
-      value={{showDiscountModal, onCheckout, totalAmountInfo}}>
+      value={{
+        showDiscountModal,
+        onCheckout,
+        totalAmountInfo,
+      }}>
+
       {/* Discount Modal */}
-      <CustomModal ref={discountModalRef}>
-        <View style={{paddingVertical: SPACING['LARGE']}}>
+      <CustomModal
+        ref={discountModalRef}>
+
+        <View
+          style={{
+            paddingVertical:
+              SPACING['LARGE'],
+          }}>
+
           <Text
             fontStyle="FW600_16"
             textAlign="center"
-            style={{marginBottom: 30}}>
+            style={{
+              marginBottom: 30,
+            }}>
             {t('add_discount')}
           </Text>
+
           {/* Form */}
-          <Stack justify="space-between">
-            <View style={{width: '48%'}}>
+          <Stack
+            justify="space-between">
+
+            <View
+              style={{
+                width: '48%',
+              }}>
+
               <AppTextFiled
                 name="discountAmount"
                 type="number"
                 require
-                error={Boolean(discountErrors.discountAmount)}
-                control={discountControl}
+                error={Boolean(
+                  discountErrors.discountAmount,
+                )}
+                control={
+                  discountControl
+                }
               />
+
             </View>
-            <View style={{width: '48%'}}>
+
+            <View
+              style={{
+                width: '48%',
+              }}>
+
               <AppSelectField
                 name="discountType"
-                data={DISCOUNT_TYPE_ARRAY}
-                control={discountControl}
+                data={
+                  DISCOUNT_TYPE_ARRAY
+                }
+                control={
+                  discountControl
+                }
               />
+
             </View>
+
           </Stack>
-          <Stack justify="center" style={{marginTop: 30}}>
+
+          <Stack
+            justify="center"
+            style={{
+              marginTop: 30,
+            }}>
+
             <Button
               title={'Add'}
-              style={{minWidth: 150}}
+              style={{
+                minWidth: 150,
+              }}
               colorScheme="green"
-              onPress={discountHandleSubmit(onDiscountSubmit)}
+              onPress={discountHandleSubmit(
+                onDiscountSubmit,
+              )}
             />
+
           </Stack>
           {/* Form */}
+
         </View>
+
       </CustomModal>
 
       {/* Pay With Modal */}
-      <CustomBottomModal ref={payWithModalRef}>
-        <View style={{marginBottom: 30}}>
-          <Text fontStyle="FW600_16" textAlign="center">
+      <CustomBottomModal
+        ref={payWithModalRef}>
+
+        <View
+          style={{
+            marginBottom: 30,
+          }}>
+
+          <Text
+            fontStyle="FW600_16"
+            textAlign="center">
             {t('pay_with')}
           </Text>
+
         </View>
+
         <Stack columnSpace={10}>
+
           <TouchableOpacity
-            onPress={() => onAmountDue(1)}
-            style={[styles.card, {borderColor: colors.colorD9D9D9}]}>
-            <SvgXml xml={IconSvg.cash} />
+            onPress={() =>
+              onAmountDue(1)
+            }
+            style={[
+              styles.card,
+              {
+                borderColor:
+                  colors.colorD9D9D9,
+              },
+            ]}>
+
+            <SvgXml
+              xml={IconSvg.cash}
+            />
+
           </TouchableOpacity>
+
           <TouchableOpacity
-            onPress={() => onAmountDue(2)}
-            style={[styles.card, {borderColor: colors.colorD9D9D9}]}>
-            <SvgXml xml={IconSvg.kpay} />
+            onPress={() =>
+              onAmountDue(2)
+            }
+            style={[
+              styles.card,
+              {
+                borderColor:
+                  colors.colorD9D9D9,
+              },
+            ]}>
+
+            <SvgXml
+              xml={IconSvg.kpay}
+            />
+
           </TouchableOpacity>
+
           <TouchableOpacity
-            onPress={() => onAmountDue(3)}
-            style={[styles.card, {borderColor: colors.colorD9D9D9}]}>
+            onPress={() =>
+              onAmountDue(3)
+            }
+            style={[
+              styles.card,
+              {
+                borderColor:
+                  colors.colorD9D9D9,
+              },
+            ]}>
+
             <Image
-              source={ImagesAsset.ayapay}
-              style={{width: '100%', height: 38}}
+              source={
+                ImagesAsset.ayapay
+              }
+              style={{
+                width: '100%',
+                height: 38,
+              }}
               resizeMode="cover"
             />
+
           </TouchableOpacity>
+
         </Stack>
+
       </CustomBottomModal>
 
       {/* Amount Due */}
-      <CustomBottomModal ref={amountDueModalRef}>
-        <View style={{marginBottom: 10, flexDirection: 'column', rowGap: 20}}>
-          <Text fontStyle="FW600_14" textAlign="center">
+      <CustomBottomModal
+        ref={amountDueModalRef}>
+
+        <View
+          style={{
+            marginBottom: 10,
+            flexDirection:
+              'column',
+            rowGap: 20,
+          }}>
+
+          <Text
+            fontStyle="FW600_14"
+            textAlign="center">
             {t('amount_due')}
           </Text>
+
           <View>
+
             <Text
               fontStyle="FW800_20"
               textAlign="center"
-              textColor={colors.primary}>
-              {getCaculatedTotalAmountDue(totalAmountInfo)}
+              textColor={
+                colors.primary
+              }>
+
+              {getCaculatedTotalAmountDue(
+                totalAmountInfo,
+              )}
+
             </Text>
+
             {discountMessage && (
               <Text
                 fontStyle="FW400_10"
-                textColor={colors.colorA3A3A3}
+                textColor={
+                  colors.colorA3A3A3
+                }
                 textAlign="center">
+
                 {discountMessage}
+
               </Text>
             )}
+
           </View>
-          <Text fontStyle="FW600_14" textAlign="center">
+
+          <Text
+            fontStyle="FW600_14"
+            textAlign="center">
+
             {t('amount_paid')}
+
           </Text>
+
         </View>
+
         <AppTextFiled
           name="amountDue"
-          control={amountDueControl}
+          control={
+            amountDueControl
+          }
           type="number"
           require
-          error={amountDueErrors?.amountDue?.message}
-          inputStyle={{textAlign: 'center'}}
+          error={
+            amountDueErrors
+              ?.amountDue
+              ?.message
+          }
+          inputStyle={{
+            textAlign: 'center',
+          }}
         />
-        <Stack columnSpace={10} style={{marginTop: 30, marginBottom: 10}}>
-          <View style={{flex: 1}}>
+
+        <Stack
+          columnSpace={10}
+          style={{
+            marginTop: 30,
+            marginBottom: 10,
+          }}>
+
+          <View
+            style={{
+              flex: 1,
+            }}>
+
             <Button
               title={t('ok')}
               colorScheme="green"
-              onPress={amountDueHandleSubmit(onAmountDueSubmit)}
+              onPress={amountDueHandleSubmit(
+                onAmountDueSubmit,
+              )}
               fullwidth
             />
+
           </View>
-          <View style={{flex: 1}}>
+
+          <View
+            style={{
+              flex: 1,
+            }}>
+
             <Button
-              title={t('cancel')}
+              title={
+                t('cancel')
+              }
               colorScheme="primary"
               fullwidth
               onPress={() => {
-                amountDueModalRef?.current?.close();
-                isDiscountModalForTotal.current = false;
+                amountDueModalRef
+                  ?.current
+                  ?.close();
+
+                isDiscountModalForTotal.current =
+                  false;
               }}
             />
+
           </View>
+
         </Stack>
+
         <Button
-          title={t('add_discount')}
+          title={
+            t('add_discount')
+          }
           onPress={() => {
             showDiscountModal();
-            isDiscountModalForTotal.current = true;
+
+            isDiscountModalForTotal.current =
+              true;
           }}
           fullwidth
           colorScheme="blue"
         />
+
       </CustomBottomModal>
 
-      <CustomBottomModal ref={amountDueReceiptModalRef}>
-        <View style={{marginBottom: 10, flexDirection: 'column', rowGap: 20}}>
-          <Text fontStyle="FW600_14" textAlign="center">
+      {/* Receipt */}
+      <CustomBottomModal
+        ref={
+          amountDueReceiptModalRef
+        }>
+
+        <View
+          style={{
+            marginBottom: 10,
+            flexDirection:
+              'column',
+            rowGap: 20,
+          }}>
+
+          <Text
+            fontStyle="FW600_14"
+            textAlign="center">
+
             {t('amount_due')}
+
           </Text>
+
         </View>
+
         <View>
-          <Text fontStyle="FW400_12" textAlign="center">
+
+          <Text
+            fontStyle="FW400_12"
+            textAlign="center">
+
             {t('change')}
+
           </Text>
+
           <Text
             fontStyle="FW400_12"
             textAlign="center"
-            style={{paddingVertical: 15}}>
+            style={{
+              paddingVertical: 15,
+            }}>
+
             {dueAmountInfo?.value} Ks
+
           </Text>
+
         </View>
+
         <Button
-          title={t('receipt')}
+          title={
+            t('receipt')
+          }
           onPress={() => {
-            navigate(SCREENS.RECEIPT.name, {
-              invoiceId: dueAmountInfo?.invoiceId,
-              paidAmount: dueAmountInfo?.paidAmount,
-              changeAmount: dueAmountInfo?.changeAmount,
-            });
-            eventBus.emit(EMIT_TAGS.SUSPEND);
-            amountDueReceiptModalRef?.current?.close();
+            navigate(
+              SCREENS.RECEIPT.name,
+              {
+                invoiceId:
+                  dueAmountInfo?.invoiceId,
+
+                paidAmount:
+                  dueAmountInfo?.paidAmount,
+
+                changeAmount:
+                  dueAmountInfo?.changeAmount,
+              },
+            );
+
+            eventBus.emit(
+              EMIT_TAGS.SUSPEND,
+            );
+
+            amountDueReceiptModalRef
+              ?.current
+              ?.close();
           }}
           fullwidth
           colorScheme="green"
-          style={{marginBottom: 10}}
+          style={{
+            marginBottom: 10,
+          }}
         />
+
         <Button
-          title={t('no_receipt')}
+          title={
+            t('no_receipt')
+          }
           onPress={() => {
-            Alert.alert('Are you sure ?', '', [
-              {
-                text: 'Confirm',
-                onPress: () => {
-                  navigate(SCREENS.RECEIPT.name, {
-                    invoiceId: dueAmountInfo?.invoiceId,
-                    type: 'no-receipt',
-                    paidAmount: dueAmountInfo?.paidAmount,
-                    changeAmount: dueAmountInfo?.changeAmount,
-                  });
-                  eventBus.emit(EMIT_TAGS.SUSPEND);
-                  amountDueReceiptModalRef?.current?.close();
+            Alert.alert(
+              'Are you sure ?',
+              '',
+              [
+                {
+                  text: 'Confirm',
+
+                  onPress: () => {
+                    navigate(
+                      SCREENS
+                        .RECEIPT
+                        .name,
+                      {
+                        invoiceId:
+                          dueAmountInfo?.invoiceId,
+
+                        type:
+                          'no-receipt',
+
+                        paidAmount:
+                          dueAmountInfo?.paidAmount,
+
+                        changeAmount:
+                          dueAmountInfo?.changeAmount,
+                      },
+                    );
+
+                    eventBus.emit(
+                      EMIT_TAGS.SUSPEND,
+                    );
+
+                    amountDueReceiptModalRef
+                      ?.current
+                      ?.close();
+                  },
                 },
-              },
-              {
-                text: 'Close',
-                style: 'cancel',
-              },
-            ]);
+                {
+                  text: 'Close',
+                  style: 'cancel',
+                },
+              ],
+            );
           }}
           fullwidth
           colorScheme="primary"
         />
+
       </CustomBottomModal>
 
       {children}
+
     </ThemeContext.Provider>
   );
 };

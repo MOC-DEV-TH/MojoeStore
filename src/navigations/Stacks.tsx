@@ -118,12 +118,20 @@ export function InventoryStack() {
   const isOwnerRole = isOwner();
   const {t} = useTranslation();
 
-  const InventoryRightHeader = () => {
+  const InventoryRightHeader = ({
+    showSearch = true,
+  }: {
+    showSearch?: boolean;
+  }) => {
     return (
       <Row items="center" columnSpace={15}>
-        <TouchableOpacity onPress={() => dispatch(toggleInventorySearchBox())}>
-          <SvgXml xml={IconSvg.search} width={23} height={23} />
-        </TouchableOpacity>
+        {showSearch && (
+          <TouchableOpacity
+            onPress={() => dispatch(toggleInventorySearchBox())}>
+            <SvgXml xml={IconSvg.search} width={23} height={23} />
+          </TouchableOpacity>
+        )}
+
         {isOwnerRole && (
           <TouchableOpacity
             onPress={() => navigate(SCREENS.INVENTORY_ADD_NEW.name)}>
@@ -136,37 +144,51 @@ export function InventoryStack() {
 
   return (
     <Stack.Navigator initialRouteName={SCREENS.INVENTORY.name}>
+      {/* Inventory */}
       <Stack.Screen
         name={SCREENS.INVENTORY.name}
         component={SCREENS.INVENTORY.component}
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">{t('inventory')}</Text>,
+          headerLeft: () => (
+            <Text fontStyle="FW600_20">{t('inventory')}</Text>
+          ),
           headerRight: () => <InventoryRightHeader />,
         }}
       />
+
+      {/* Inventory Sub Category */}
       <Stack.Screen
         name={SCREENS.INVENTORY_SUB_CATEGORY.name}
         component={SCREENS.INVENTORY_SUB_CATEGORY.component}
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">{t('inventory')}</Text>,
+          headerLeft: () => (
+            <Text fontStyle="FW600_20">{t('inventory')}</Text>
+          ),
           headerRight: () => <InventoryRightHeader />,
         }}
-        
       />
+
+      {/* Inventory Product */}
       <Stack.Screen
         name={SCREENS.INVENTORY_PRODUCT.name}
         component={SCREENS.INVENTORY_PRODUCT.component}
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">{t('inventory')}</Text>,
-          headerRight: () => <InventoryRightHeader />,
+          headerLeft: () => (
+            <Text fontStyle="FW600_20">{t('inventory')}</Text>
+          ),
+
+          // Hide Search icon on this page
+          headerRight: () => <InventoryRightHeader showSearch={false} />,
         }}
       />
+
+      {/* Add New Product */}
       <Stack.Screen
         name={SCREENS.INVENTORY_ADD_NEW.name}
         component={SCREENS.INVENTORY_ADD_NEW.component}
@@ -174,16 +196,22 @@ export function InventoryStack() {
           headerShown: true,
           headerShadowVisible: false,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">{t('add_new')}</Text>,
+          headerLeft: () => (
+            <Text fontStyle="FW600_20">{t('add_new')}</Text>
+          ),
         }}
       />
+
+      {/* Edit Product */}
       <Stack.Screen
         name={SCREENS.EDIT_PRODUCT.name}
         component={SCREENS.EDIT_PRODUCT.component}
         options={{
           headerShown: true,
           headerTitle: () => '',
-          headerLeft: () => <Text fontStyle="FW600_20">{t('edit_product')}</Text>,
+          headerLeft: () => (
+            <Text fontStyle="FW600_20">{t('edit_product')}</Text>
+          ),
         }}
       />
     </Stack.Navigator>

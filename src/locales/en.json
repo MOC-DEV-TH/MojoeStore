@@ -86,6 +86,7 @@
   "charge" : "Charge", 
 
   "print" : "Print",
-  "change" : "Change"
+  "change" : "Change",
+  "backToCashier" : "Back to cashier"
 
 }
